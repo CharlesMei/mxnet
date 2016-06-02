@@ -5,16 +5,26 @@ import os, sys
 import train_model
 
 def _download(data_dir):
-    if not os.path.isdir(data_dir):
-        os.system("mkdir " + data_dir)
+    if not os.path.exists(data_dir):
+        # os.mkdir(data_dir)  # make a directory
+        os.makedirs(data_dir)  # Recursive directory creation
     os.chdir(data_dir)
     if (not os.path.exists('train-images-idx3-ubyte')) or \
        (not os.path.exists('train-labels-idx1-ubyte')) or \
        (not os.path.exists('t10k-images-idx3-ubyte')) or \
        (not os.path.exists('t10k-labels-idx1-ubyte')):
-        os.system("wget http://webdocs.cs.ualberta.ca/~bx3/data/mnist.zip")
-        os.system("unzip -u mnist.zip; rm mnist.zip")
-    os.chdir("..")
+        url = 'http://webdocs.cs.ualberta.ca/~bx3/data/mnist.zip'
+        if sys.version_info.major == 2:
+            from urllib import urlretrieve
+        elif sys.version_info.major == 3:
+            from urllib.request import urlretrieve
+        urlretrieve(url, 'mnist.zip')
+        import zipfile
+        with zipfile.ZipFile('mnist.zip') as f:  # using with, so no need to close f explicitly
+            f.extractall()   # extract all files in current path
+        os.remove('mnist.zip')
+
+    os.chdir('..')
 
 def get_mlp():
     """
