@@ -74,8 +74,8 @@ def get_iterator(data_shape):
         flat = False if len(data_shape) == 3 else True
 
         train           = mx.io.MNISTIter(
-            image       = data_dir + "train-images-idx3-ubyte",
-            label       = data_dir + "train-labels-idx1-ubyte",
+            image       = os.path.join(data_dir, "train-images-idx3-ubyte"),
+            label       = os.path.join(data_dir, "train-labels-idx1-ubyte"),
             input_shape = data_shape,
             batch_size  = args.batch_size,
             shuffle     = True,
@@ -84,8 +84,8 @@ def get_iterator(data_shape):
             part_index  = kv.rank)
 
         val = mx.io.MNISTIter(
-            image       = data_dir + "t10k-images-idx3-ubyte",
-            label       = data_dir + "t10k-labels-idx1-ubyte",
+            image       = os.path.join(data_dir, "t10k-images-idx3-ubyte"),
+            label       = os.path.join(data_dir, "t10k-labels-idx1-ubyte"),
             input_shape = data_shape,
             batch_size  = args.batch_size,
             flat        = flat,
